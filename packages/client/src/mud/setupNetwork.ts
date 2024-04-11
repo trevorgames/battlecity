@@ -3,15 +3,6 @@
  * (https://viem.sh/docs/getting-started.html).
  * This line imports the functions we need from it.
  */
-
-/*
- * Import our MUD config, which includes strong types for
- * our tables and other config options. We use this to generate
- * things like RECS components and get back strong types for them.
- *
- * See https://mud.dev/templates/typescript/contracts#mudconfigts
- * for the source of this information.
- */
 import { Subject, share } from "rxjs"
 import {
   ClientConfig,
@@ -30,10 +21,20 @@ import { transactionQueue, writeObserver } from "@latticexyz/common/actions"
 import { createFaucetService } from "@latticexyz/services/faucet"
 import { encodeEntity, syncToRecs } from "@latticexyz/store-sync/recs"
 
+/*
+ * Import our MUD config, which includes strong types for
+ * our tables and other config options. We use this to generate
+ * things like RECS components and get back strong types for them.
+ *
+ * See https://mud.dev/templates/typescript/contracts#mudconfigts
+ * for the source of this information.
+ */
 import mudConfig from "contracts/mud.config"
 import IWorldAbi from "contracts/out/IWorld.sol/IWorld.abi.json"
 
+import { createClock } from "./createClock"
 import { getNetworkConfig } from "./getNetworkConfig"
+import { createWaitForTransaction } from "./waitForTransaction"
 import { world } from "./world"
 
 export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>
@@ -47,8 +48,8 @@ export async function setupNetwork() {
    */
   const clientOptions = {
     chain: networkConfig.chain,
-    transport: transportObserver(fallback([webSocket(), http()])),
-    pollingInterval: 1000,
+    transport: transportObserver(fallback([webSocket(), http()], { retryCount: 0 })),
+    pollingInterval: 250,
   } as const satisfies ClientConfig
 
   const publicClient = createPublicClient(clientOptions)
@@ -68,7 +69,9 @@ export async function setupNetwork() {
     ...clientOptions,
     account: burnerAccount,
   })
+    // Add simulation, nonce management and transaction queueing for sendTransaction and writeContract actions
     .extend(transactionQueue())
+    // Add an observer to capture writeContract action
     .extend(writeObserver({ onWrite: (write) => write$.next(write) }))
 
   /*
@@ -86,12 +89,26 @@ export async function setupNetwork() {
    * to the viem publicClient to make RPC calls to fetch MUD
    * events from the chain.
    */
-  const { components, latestBlock$, storedBlockLogs$, waitForTransaction } = await syncToRecs({
+  const { components, latestBlock$, storedBlockLogs$ } = await syncToRecs({
     world,
     config: mudConfig,
     address: networkConfig.worldAddress as Hex,
     publicClient,
     startBlock: BigInt(networkConfig.initialBlockNumber),
+  })
+
+  const clock = createClock(networkConfig.clock)
+  world.registerDisposer(() => clock.dispose())
+
+  const txReceiptClient = createPublicClient({
+    ...clientOptions,
+    transport: http(),
+    pollingInterval: 250,
+  })
+
+  const waitForTransaction = createWaitForTransaction({
+    storedBlockLogs$,
+    client: txReceiptClient,
   })
 
   /*

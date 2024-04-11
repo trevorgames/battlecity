@@ -1,30 +1,37 @@
-import { useComponentValue } from "@latticexyz/react"
-import { singletonEntity } from "@latticexyz/store-sync/recs"
+import { RainbowKitProvider, getDefaultConfig } from "@rainbow-me/rainbowkit"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { useMemo } from "react"
+import { RouterProvider } from "react-router-dom"
+import { WagmiProvider, http } from "wagmi"
 
-import { useMUD } from "./MUDContext"
+import { getNetworkConfig } from "./mud/getNetworkConfig"
+import { router } from "./router"
+
+export const queryClient = new QueryClient()
 
 export const App = () => {
-  const {
-    components: { Counter },
-    systemCalls: { increment },
-  } = useMUD()
+  const networkConfig = useMemo(() => getNetworkConfig(), [])
 
-  const counter = useComponentValue(Counter, singletonEntity)
+  const wagmiConfig = useMemo(
+    () =>
+      getDefaultConfig({
+        appName: "Battle City",
+        projectId: "", // TODO: from WalletConnect Cloud
+        chains: [networkConfig.chain],
+        transports: {
+          [networkConfig.chain.id]: http(),
+        },
+      }),
+    [networkConfig],
+  )
 
   return (
-    <>
-      <div>
-        Counter: <span>{counter?.value ?? "??"}</span>
-      </div>
-      <button
-        type="button"
-        onClick={async (event) => {
-          event.preventDefault()
-          console.log("new counter value:", await increment())
-        }}
-      >
-        Increment
-      </button>
-    </>
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider>
+          <RouterProvider router={router} />
+        </RainbowKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   )
 }
