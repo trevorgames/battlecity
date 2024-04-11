@@ -2,13 +2,13 @@
  * Create the system calls that the client can use to ask
  * for changes in the World state (using the System contracts).
  */
+import { getComponentValue } from "@latticexyz/recs"
+import { singletonEntity } from "@latticexyz/store-sync/recs"
 
-import { getComponentValue } from "@latticexyz/recs";
-import { ClientComponents } from "./createClientComponents";
-import { SetupNetworkResult } from "./setupNetwork";
-import { singletonEntity } from "@latticexyz/store-sync/recs";
+import { ClientComponents } from "./createClientComponents"
+import { SetupNetworkResult } from "./setupNetwork"
 
-export type SystemCalls = ReturnType<typeof createSystemCalls>;
+export type SystemCalls = ReturnType<typeof createSystemCalls>
 
 export function createSystemCalls(
   /*
@@ -40,12 +40,12 @@ export function createSystemCalls(
      * is in the root namespace, `.increment` can be called directly
      * on the World contract.
      */
-    const tx = await worldContract.write.increment();
-    await waitForTransaction(tx);
-    return getComponentValue(Counter, singletonEntity);
-  };
+    const tx = await worldContract.write.increment()
+    await waitForTransaction(tx)
+    return getComponentValue(Counter, singletonEntity)
+  }
 
   return {
     increment,
-  };
+  }
 }

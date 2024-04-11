@@ -1,12 +1,14 @@
-import ReactDOM from "react-dom/client";
-import { App } from "./App";
-import { setup } from "./mud/setup";
-import { MUDProvider } from "./MUDContext";
-import mudConfig from "contracts/mud.config";
+import ReactDOM from "react-dom/client"
 
-const rootElement = document.getElementById("react-root");
-if (!rootElement) throw new Error("React root not found");
-const root = ReactDOM.createRoot(rootElement);
+import mudConfig from "contracts/mud.config"
+
+import { App } from "./App"
+import { MUDProvider } from "./MUDContext"
+import { setup } from "./mud/setup"
+
+const rootElement = document.getElementById("react-root")
+if (!rootElement) throw new Error("React root not found")
+const root = ReactDOM.createRoot(rootElement)
 
 // TODO: figure out if we actually want this to be async or if we should render something else in the meantime
 setup().then(async (result) => {
@@ -14,11 +16,11 @@ setup().then(async (result) => {
     <MUDProvider value={result}>
       <App />
     </MUDProvider>,
-  );
+  )
 
   // https://vitejs.dev/guide/env-and-mode.html
   if (import.meta.env.DEV) {
-    const { mount: mountDevTools } = await import("@latticexyz/dev-tools");
+    const { mount: mountDevTools } = await import("@latticexyz/dev-tools")
     mountDevTools({
       config: mudConfig,
       publicClient: result.network.publicClient,
@@ -29,6 +31,6 @@ setup().then(async (result) => {
       worldAbi: result.network.worldContract.abi,
       write$: result.network.write$,
       recsWorld: result.network.world,
-    });
+    })
   }
-});
+})
