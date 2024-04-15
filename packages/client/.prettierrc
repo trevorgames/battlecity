@@ -4,7 +4,7 @@
   "tabWidth": 2,
   "useTabs": false,
   "bracketSpacing": true,
-  "plugins": ["@trivago/prettier-plugin-sort-imports"],
+  "plugins": ["@trivago/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
   "importOrder": ["^@latticexyz/(.*)$", "^contracts/(.*)$", "^[./]"],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true

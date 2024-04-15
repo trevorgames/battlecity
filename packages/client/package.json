@@ -12,6 +12,7 @@
     "prettier": "prettier --write '**/*.{ts,tsx}'"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.18",
     "@latticexyz/common": "2.0.4",
     "@latticexyz/dev-tools": "2.0.4",
     "@latticexyz/react": "2.0.4",
@@ -32,12 +33,18 @@
     "wagmi": "^2.5.19"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.7",
+    "@tailwindcss/typography": "^0.5.12",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
     "@vitejs/plugin-react": "^3.1.0",
+    "autoprefixer": "^10.4.19",
     "eslint-plugin-react": "7.31.11",
     "eslint-plugin-react-hooks": "4.6.0",
+    "postcss": "^8.4.38",
+    "prettier-plugin-tailwindcss": "^0.5.13",
+    "tailwindcss": "^3.4.3",
     "vite": "^4.2.1",
     "wait-port": "^1.0.4"
   }
