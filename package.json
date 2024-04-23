@@ -1,10 +1,10 @@
 {
-  "name": "battlecity",
+  "name": "stratego",
   "version": "0.0.0",
-  "description": "A mud on-chain Battle City",
+  "description": "A mud on-chain Stratego",
   "repository": {
     "type": "git",
-    "url": "https://github.com/trevorgames/battlecity.git"
+    "url": "https://github.com/trevorgames/stratego.git"
   },
   "private": true,
   "lint-staged": {

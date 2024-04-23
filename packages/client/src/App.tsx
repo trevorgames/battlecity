@@ -15,7 +15,7 @@ export const App = () => {
   const wagmiConfig = useMemo(
     () =>
       getDefaultConfig({
-        appName: "Battle City",
+        appName: "Stratego",
         projectId: "", // TODO: from WalletConnect Cloud
         chains: [networkConfig.chain],
         transports: {
