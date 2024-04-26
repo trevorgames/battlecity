@@ -17,7 +17,7 @@ template Defense() {
     // check last arrangement
     component hasher = ArrangementHasher();
     for (var i = 0; i < 100; i++) {
-        hasher.arrangement[i] <== lastArrangement[i];
+        hasher.in[i] <== lastArrangement[i];
     }
     hasher.out === lastArrangementHash;
 
@@ -64,7 +64,7 @@ template Defense() {
     // compute hash of new arrangement
     component hasherNew = ArrangementHasher();
     for (var i = 0; i < 100; i++) {
-        hasherNew.arrangement[i] <== arrangement[i];
+        hasherNew.in[i] <== arrangement[i];
     }
     
     arrangementHash <== hasherNew.out;

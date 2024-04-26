@@ -48,7 +48,7 @@ template Setup() {
     for (var i = 0; i < 12; i++) {
         cnts[i] = ValueCounter(40);
 
-        cnts[i].value <== i; // piece code
+        cnts[i].value <== i + 1; // piece code
 
         for (var j = 0; j < 40; j++) {
             cnts[i].ins[j] <== arrangement[j];
@@ -61,13 +61,13 @@ template Setup() {
 
     for (var i = 0; i < 100; i++) {
         if (i < 40) {
-            hasher.arrangement[i] <== arrangement[i];
+            hasher.in[i] <== arrangement[i];
         } else {
-            hasher.arrangement[i] <== 0;
+            hasher.in[i] <== 0;
         }
     }
 
-    arrangementHash <== hasher.arrangementHash;
+    arrangementHash <== hasher.out;
 }
 
 component main = Setup();

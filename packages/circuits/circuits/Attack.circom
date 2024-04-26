@@ -18,7 +18,7 @@ template Attack() {
     // check last arrangement
     component hasher = ArrangementHasher();
     for (var i = 0; i < 100; i++) {
-        hasher.arrangement[i] <== lastArrangement[i];
+        hasher.in[i] <== lastArrangement[i];
     }
     hasher.out === lastArrangementHash;
 
@@ -70,8 +70,8 @@ template Attack() {
     component hasherSuccess = ArrangementHasher();
     component hasherFailure = ArrangementHasher();
     for (var i = 0; i < 100; i++) {
-        hasherSuccess.arrangement[i] <== arrangementSuccess[i];
-        hasherFailure.arrangement[i] <== arrangementFailure[i];
+        hasherSuccess.in[i] <== arrangementSuccess[i];
+        hasherFailure.in[i] <== arrangementFailure[i];
     }
     
     arrangementHashSuccess <== hasherSuccess.out;
