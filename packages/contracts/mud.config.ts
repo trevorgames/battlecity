@@ -8,5 +8,24 @@ export default defineWorld({
       },
       key: [],
     },
+
+    Name: "string",
+    NameExists: {
+      key: ["nameData"],
+      schema: {
+        nameData: "bytes32",
+        value: "bool",
+      },
+    },
+
+    Verifier: {
+      key: [],
+      schema: {
+        setupVerifier: "address",
+        moveVerifier: "address",
+        attackVerifier: "address",
+        defenseVerifier: "address",
+      }
+    }
   },
 });

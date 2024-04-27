@@ -230,6 +230,9 @@ importers:
         specifier: 2.0.4
         version: 2.0.4(bufferutil@4.0.8)(typescript@5.4.2)(utf-8-validate@6.0.3)
     devDependencies:
+      '@dk1a/solidity-stringutils':
+        specifier: ^0.3.3
+        version: 0.3.3
       '@types/node':
         specifier: ^18.15.11
         version: 18.19.31
@@ -1004,6 +1007,9 @@ packages:
 
   '@coinbase/wallet-sdk@3.9.1':
     resolution: {integrity: sha512-cGUE8wm1/cMI8irRMVOqbFWYcnNugqCtuy2lnnHfgloBg+GRLs9RsrkOUDMdv/StfUeeKhCDyYudsXXvcL1xIA==}
+
+  '@dk1a/solidity-stringutils@0.3.3':
+    resolution: {integrity: sha512-IQodjgcYtYudV1vXUl3f5B/cau0gSji1Izae6a9UiVP5VdJOk+D4QcmCrjy8Rzdb5i2vlPVtrBHhbYncW1+Kcg==}
 
   '@emotion/babel-plugin@11.11.0':
     resolution: {integrity: sha512-m4HEDZleaaCH+XgDDsPF15Ht6wTLsgDTeR3WYj9Q/k76JtWhrJjcP4+/XlG8LGT/Rol9qUfOIztXeA84ATpqPQ==}
@@ -7244,6 +7250,8 @@ snapshots:
       sha.js: 2.4.11
     transitivePeerDependencies:
       - supports-color
+
+  '@dk1a/solidity-stringutils@0.3.3': {}
 
   '@emotion/babel-plugin@11.11.0':
     dependencies:
