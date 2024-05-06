@@ -1,6 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
+import { Admin } from "../codegen/index.sol";
+
+function isAdmin(bytes32 key) view returns (bool) {
+  return Admin.get(key);
+}
+
 function min(int32 a, int32 b) pure returns (int32) {
   return a < b ? a : b;
 }

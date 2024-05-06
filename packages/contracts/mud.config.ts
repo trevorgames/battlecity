@@ -9,6 +9,18 @@ export default defineWorld({
       key: [],
     },
 
+    Config: {
+      key: [],
+      schema: {
+        locked: "bool",
+      }
+    },
+
+    /**
+     * Marks an address entity as an admin.
+     */
+    Admin: "bool",
+
     Name: "string",
     NameExists: {
       key: ["nameData"],
