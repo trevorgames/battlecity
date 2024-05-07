@@ -13,7 +13,10 @@ export default defineWorld({
       key: [],
       schema: {
         locked: "bool",
-      }
+        swordToken: "address",
+        seasonPassToken: "address",
+        strategoKeyToken: "address",
+      },
     },
 
     /**
@@ -37,7 +40,52 @@ export default defineWorld({
         moveVerifier: "address",
         attackVerifier: "address",
         defenseVerifier: "address",
-      }
-    }
+      },
+    },
+
+    MatchConfig: {
+      key: ["matchEntity"],
+      schema: {
+        matchEntity: "bytes32",
+        registrationTime: "uint256", // timestamp in seconds since the epoch
+        startTime: "uint256", // timestamp in seconds since the epoch
+        turnLength: "uint256", // seconds
+        createdBy: "bytes32",
+      },
+    },
+
+    SeasonPassIndex: {
+      key: [],
+      schema: {
+        tokenIndex: "uint256", // incrementing token ID of season passes
+      },
+    },
+    SeasonPassConfig: {
+      key: [],
+      schema: {
+        minPrice: "uint256",
+        startingPrice: "uint256",
+        rate: "uint256",
+        multiplier: "uint256",
+        mintCutoff: "uint256",
+      },
+    },
+    SeasonPassSale: {
+      type: "offchainTable",
+      key: ["buyer", "tokenId"],
+      schema: {
+        buyer: "address",
+        tokenId: "uint256",
+        price: "uint256",
+        purchasedAt: "uint256",
+        tokenAddress: "address",
+      },
+    },
+    SeasonPassLastSaleAt: {
+      key: [],
+      schema: {
+        lastSaleAt: "uint256",
+      },
+    },
   },
 });

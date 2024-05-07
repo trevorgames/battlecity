@@ -2,3 +2,4 @@ ds-test/=node_modules/ds-test/src/
 forge-std/=node_modules/forge-std/src/
 @latticexyz/=node_modules/@latticexyz/
 @dk1a/solidity-stringutils/=node_modules/@dk1a/solidity-stringutils/
+solmate/=node_modules/solmate/src/

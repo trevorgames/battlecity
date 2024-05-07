@@ -257,6 +257,9 @@ importers:
       solhint-plugin-mud:
         specifier: 2.0.4
         version: 2.0.4
+      solmate:
+        specifier: ^6.2.0
+        version: 6.2.0
 
 packages:
 
@@ -5539,6 +5542,9 @@ packages:
 
   solidity-comments-extractor@0.0.8:
     resolution: {integrity: sha512-htM7Vn6LhHreR+EglVMd2s+sZhcXAirB1Zlyrv5zBuTxieCvjfnRpd7iZk75m/u6NOlEyQ94C6TWbBn2cY7w8g==}
+
+  solmate@6.2.0:
+    resolution: {integrity: sha512-AM38ioQ2P8zRsA42zenb9or6OybRjOLXIu3lhIT8rhddUuduCt76pUEuLxOIg9GByGojGz+EbpFdCB6B+QZVVA==}
 
   sonic-boom@2.8.0:
     resolution: {integrity: sha512-kuonw1YOYYNOve5iHdSahXPOK49GqwA+LZhI6Wz/l0rP57iKyXXIHaRagOBHAPmGwJC6od2Z9zgvZ5loSgMlVg==}
@@ -13018,6 +13024,8 @@ snapshots:
       - typescript
 
   solidity-comments-extractor@0.0.8: {}
+
+  solmate@6.2.0: {}
 
   sonic-boom@2.8.0:
     dependencies:

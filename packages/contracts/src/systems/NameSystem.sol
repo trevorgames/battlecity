@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
+
 import { System } from "@latticexyz/world/src/System.sol";
 
 import { StrChar, toSlice, StrCharsIter, isAscii, StrSlice } from "@dk1a/solidity-stringutils/src/StrSlice.sol";

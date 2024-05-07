@@ -16,24 +16,25 @@ import { Schema } from "@latticexyz/store/src/Schema.sol";
 import { EncodedLengths, EncodedLengthsLib } from "@latticexyz/store/src/EncodedLengths.sol";
 import { ResourceId } from "@latticexyz/store/src/ResourceId.sol";
 
-struct ConfigData {
-  bool locked;
-  address swordToken;
-  address seasonPassToken;
-  address strategoKeyToken;
+struct SeasonPassConfigData {
+  uint256 minPrice;
+  uint256 startingPrice;
+  uint256 rate;
+  uint256 multiplier;
+  uint256 mintCutoff;
 }
 
-library Config {
-  // Hex below is the result of `WorldResourceIdLib.encode({ namespace: "", name: "Config", typeId: RESOURCE_TABLE });`
-  ResourceId constant _tableId = ResourceId.wrap(0x74620000000000000000000000000000436f6e66696700000000000000000000);
+library SeasonPassConfig {
+  // Hex below is the result of `WorldResourceIdLib.encode({ namespace: "", name: "SeasonPassConfig", typeId: RESOURCE_TABLE });`
+  ResourceId constant _tableId = ResourceId.wrap(0x74620000000000000000000000000000536561736f6e50617373436f6e666967);
 
   FieldLayout constant _fieldLayout =
-    FieldLayout.wrap(0x003d040001141414000000000000000000000000000000000000000000000000);
+    FieldLayout.wrap(0x00a0050020202020200000000000000000000000000000000000000000000000);
 
   // Hex-encoded key schema of ()
   Schema constant _keySchema = Schema.wrap(0x0000000000000000000000000000000000000000000000000000000000000000);
-  // Hex-encoded value schema of (bool, address, address, address)
-  Schema constant _valueSchema = Schema.wrap(0x003d040060616161000000000000000000000000000000000000000000000000);
+  // Hex-encoded value schema of (uint256, uint256, uint256, uint256, uint256)
+  Schema constant _valueSchema = Schema.wrap(0x00a005001f1f1f1f1f0000000000000000000000000000000000000000000000);
 
   /**
    * @notice Get the table's key field names.
@@ -48,11 +49,12 @@ library Config {
    * @return fieldNames An array of strings with the names of value fields.
    */
   function getFieldNames() internal pure returns (string[] memory fieldNames) {
-    fieldNames = new string[](4);
-    fieldNames[0] = "locked";
-    fieldNames[1] = "swordToken";
-    fieldNames[2] = "seasonPassToken";
-    fieldNames[3] = "strategoKeyToken";
+    fieldNames = new string[](5);
+    fieldNames[0] = "minPrice";
+    fieldNames[1] = "startingPrice";
+    fieldNames[2] = "rate";
+    fieldNames[3] = "multiplier";
+    fieldNames[4] = "mintCutoff";
   }
 
   /**
@@ -70,161 +72,199 @@ library Config {
   }
 
   /**
-   * @notice Get locked.
+   * @notice Get minPrice.
    */
-  function getLocked() internal view returns (bool locked) {
+  function getMinPrice() internal view returns (uint256 minPrice) {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (_toBool(uint8(bytes1(_blob))));
+    return (uint256(bytes32(_blob)));
   }
 
   /**
-   * @notice Get locked.
+   * @notice Get minPrice.
    */
-  function _getLocked() internal view returns (bool locked) {
+  function _getMinPrice() internal view returns (uint256 minPrice) {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (_toBool(uint8(bytes1(_blob))));
+    return (uint256(bytes32(_blob)));
   }
 
   /**
-   * @notice Set locked.
+   * @notice Set minPrice.
    */
-  function setLocked(bool locked) internal {
+  function setMinPrice(uint256 minPrice) internal {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
-    StoreSwitch.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((locked)), _fieldLayout);
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((minPrice)), _fieldLayout);
   }
 
   /**
-   * @notice Set locked.
+   * @notice Set minPrice.
    */
-  function _setLocked(bool locked) internal {
+  function _setMinPrice(uint256 minPrice) internal {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
-    StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((locked)), _fieldLayout);
+    StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((minPrice)), _fieldLayout);
   }
 
   /**
-   * @notice Get swordToken.
+   * @notice Get startingPrice.
    */
-  function getSwordToken() internal view returns (address swordToken) {
+  function getStartingPrice() internal view returns (uint256 startingPrice) {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 1, _fieldLayout);
-    return (address(bytes20(_blob)));
+    return (uint256(bytes32(_blob)));
   }
 
   /**
-   * @notice Get swordToken.
+   * @notice Get startingPrice.
    */
-  function _getSwordToken() internal view returns (address swordToken) {
+  function _getStartingPrice() internal view returns (uint256 startingPrice) {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 1, _fieldLayout);
-    return (address(bytes20(_blob)));
+    return (uint256(bytes32(_blob)));
   }
 
   /**
-   * @notice Set swordToken.
+   * @notice Set startingPrice.
    */
-  function setSwordToken(address swordToken) internal {
+  function setStartingPrice(uint256 startingPrice) internal {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
-    StoreSwitch.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((swordToken)), _fieldLayout);
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((startingPrice)), _fieldLayout);
   }
 
   /**
-   * @notice Set swordToken.
+   * @notice Set startingPrice.
    */
-  function _setSwordToken(address swordToken) internal {
+  function _setStartingPrice(uint256 startingPrice) internal {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
-    StoreCore.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((swordToken)), _fieldLayout);
+    StoreCore.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((startingPrice)), _fieldLayout);
   }
 
   /**
-   * @notice Get seasonPassToken.
+   * @notice Get rate.
    */
-  function getSeasonPassToken() internal view returns (address seasonPassToken) {
+  function getRate() internal view returns (uint256 rate) {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 2, _fieldLayout);
-    return (address(bytes20(_blob)));
+    return (uint256(bytes32(_blob)));
   }
 
   /**
-   * @notice Get seasonPassToken.
+   * @notice Get rate.
    */
-  function _getSeasonPassToken() internal view returns (address seasonPassToken) {
+  function _getRate() internal view returns (uint256 rate) {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 2, _fieldLayout);
-    return (address(bytes20(_blob)));
+    return (uint256(bytes32(_blob)));
   }
 
   /**
-   * @notice Set seasonPassToken.
+   * @notice Set rate.
    */
-  function setSeasonPassToken(address seasonPassToken) internal {
+  function setRate(uint256 rate) internal {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
-    StoreSwitch.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((seasonPassToken)), _fieldLayout);
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((rate)), _fieldLayout);
   }
 
   /**
-   * @notice Set seasonPassToken.
+   * @notice Set rate.
    */
-  function _setSeasonPassToken(address seasonPassToken) internal {
+  function _setRate(uint256 rate) internal {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
-    StoreCore.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((seasonPassToken)), _fieldLayout);
+    StoreCore.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((rate)), _fieldLayout);
   }
 
   /**
-   * @notice Get strategoKeyToken.
+   * @notice Get multiplier.
    */
-  function getStrategoKeyToken() internal view returns (address strategoKeyToken) {
+  function getMultiplier() internal view returns (uint256 multiplier) {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 3, _fieldLayout);
-    return (address(bytes20(_blob)));
+    return (uint256(bytes32(_blob)));
   }
 
   /**
-   * @notice Get strategoKeyToken.
+   * @notice Get multiplier.
    */
-  function _getStrategoKeyToken() internal view returns (address strategoKeyToken) {
+  function _getMultiplier() internal view returns (uint256 multiplier) {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 3, _fieldLayout);
-    return (address(bytes20(_blob)));
+    return (uint256(bytes32(_blob)));
   }
 
   /**
-   * @notice Set strategoKeyToken.
+   * @notice Set multiplier.
    */
-  function setStrategoKeyToken(address strategoKeyToken) internal {
+  function setMultiplier(uint256 multiplier) internal {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
-    StoreSwitch.setStaticField(_tableId, _keyTuple, 3, abi.encodePacked((strategoKeyToken)), _fieldLayout);
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 3, abi.encodePacked((multiplier)), _fieldLayout);
   }
 
   /**
-   * @notice Set strategoKeyToken.
+   * @notice Set multiplier.
    */
-  function _setStrategoKeyToken(address strategoKeyToken) internal {
+  function _setMultiplier(uint256 multiplier) internal {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
-    StoreCore.setStaticField(_tableId, _keyTuple, 3, abi.encodePacked((strategoKeyToken)), _fieldLayout);
+    StoreCore.setStaticField(_tableId, _keyTuple, 3, abi.encodePacked((multiplier)), _fieldLayout);
+  }
+
+  /**
+   * @notice Get mintCutoff.
+   */
+  function getMintCutoff() internal view returns (uint256 mintCutoff) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 4, _fieldLayout);
+    return (uint256(bytes32(_blob)));
+  }
+
+  /**
+   * @notice Get mintCutoff.
+   */
+  function _getMintCutoff() internal view returns (uint256 mintCutoff) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 4, _fieldLayout);
+    return (uint256(bytes32(_blob)));
+  }
+
+  /**
+   * @notice Set mintCutoff.
+   */
+  function setMintCutoff(uint256 mintCutoff) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 4, abi.encodePacked((mintCutoff)), _fieldLayout);
+  }
+
+  /**
+   * @notice Set mintCutoff.
+   */
+  function _setMintCutoff(uint256 mintCutoff) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreCore.setStaticField(_tableId, _keyTuple, 4, abi.encodePacked((mintCutoff)), _fieldLayout);
   }
 
   /**
    * @notice Get the full data.
    */
-  function get() internal view returns (ConfigData memory _table) {
+  function get() internal view returns (SeasonPassConfigData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     (bytes memory _staticData, EncodedLengths _encodedLengths, bytes memory _dynamicData) = StoreSwitch.getRecord(
@@ -238,7 +278,7 @@ library Config {
   /**
    * @notice Get the full data.
    */
-  function _get() internal view returns (ConfigData memory _table) {
+  function _get() internal view returns (SeasonPassConfigData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     (bytes memory _staticData, EncodedLengths _encodedLengths, bytes memory _dynamicData) = StoreCore.getRecord(
@@ -252,8 +292,8 @@ library Config {
   /**
    * @notice Set the full data using individual values.
    */
-  function set(bool locked, address swordToken, address seasonPassToken, address strategoKeyToken) internal {
-    bytes memory _staticData = encodeStatic(locked, swordToken, seasonPassToken, strategoKeyToken);
+  function set(uint256 minPrice, uint256 startingPrice, uint256 rate, uint256 multiplier, uint256 mintCutoff) internal {
+    bytes memory _staticData = encodeStatic(minPrice, startingPrice, rate, multiplier, mintCutoff);
 
     EncodedLengths _encodedLengths;
     bytes memory _dynamicData;
@@ -266,8 +306,14 @@ library Config {
   /**
    * @notice Set the full data using individual values.
    */
-  function _set(bool locked, address swordToken, address seasonPassToken, address strategoKeyToken) internal {
-    bytes memory _staticData = encodeStatic(locked, swordToken, seasonPassToken, strategoKeyToken);
+  function _set(
+    uint256 minPrice,
+    uint256 startingPrice,
+    uint256 rate,
+    uint256 multiplier,
+    uint256 mintCutoff
+  ) internal {
+    bytes memory _staticData = encodeStatic(minPrice, startingPrice, rate, multiplier, mintCutoff);
 
     EncodedLengths _encodedLengths;
     bytes memory _dynamicData;
@@ -280,12 +326,13 @@ library Config {
   /**
    * @notice Set the full data using the data struct.
    */
-  function set(ConfigData memory _table) internal {
+  function set(SeasonPassConfigData memory _table) internal {
     bytes memory _staticData = encodeStatic(
-      _table.locked,
-      _table.swordToken,
-      _table.seasonPassToken,
-      _table.strategoKeyToken
+      _table.minPrice,
+      _table.startingPrice,
+      _table.rate,
+      _table.multiplier,
+      _table.mintCutoff
     );
 
     EncodedLengths _encodedLengths;
@@ -299,12 +346,13 @@ library Config {
   /**
    * @notice Set the full data using the data struct.
    */
-  function _set(ConfigData memory _table) internal {
+  function _set(SeasonPassConfigData memory _table) internal {
     bytes memory _staticData = encodeStatic(
-      _table.locked,
-      _table.swordToken,
-      _table.seasonPassToken,
-      _table.strategoKeyToken
+      _table.minPrice,
+      _table.startingPrice,
+      _table.rate,
+      _table.multiplier,
+      _table.mintCutoff
     );
 
     EncodedLengths _encodedLengths;
@@ -320,14 +368,20 @@ library Config {
    */
   function decodeStatic(
     bytes memory _blob
-  ) internal pure returns (bool locked, address swordToken, address seasonPassToken, address strategoKeyToken) {
-    locked = (_toBool(uint8(Bytes.getBytes1(_blob, 0))));
+  )
+    internal
+    pure
+    returns (uint256 minPrice, uint256 startingPrice, uint256 rate, uint256 multiplier, uint256 mintCutoff)
+  {
+    minPrice = (uint256(Bytes.getBytes32(_blob, 0)));
 
-    swordToken = (address(Bytes.getBytes20(_blob, 1)));
+    startingPrice = (uint256(Bytes.getBytes32(_blob, 32)));
 
-    seasonPassToken = (address(Bytes.getBytes20(_blob, 21)));
+    rate = (uint256(Bytes.getBytes32(_blob, 64)));
 
-    strategoKeyToken = (address(Bytes.getBytes20(_blob, 41)));
+    multiplier = (uint256(Bytes.getBytes32(_blob, 96)));
+
+    mintCutoff = (uint256(Bytes.getBytes32(_blob, 128)));
   }
 
   /**
@@ -340,8 +394,10 @@ library Config {
     bytes memory _staticData,
     EncodedLengths,
     bytes memory
-  ) internal pure returns (ConfigData memory _table) {
-    (_table.locked, _table.swordToken, _table.seasonPassToken, _table.strategoKeyToken) = decodeStatic(_staticData);
+  ) internal pure returns (SeasonPassConfigData memory _table) {
+    (_table.minPrice, _table.startingPrice, _table.rate, _table.multiplier, _table.mintCutoff) = decodeStatic(
+      _staticData
+    );
   }
 
   /**
@@ -367,12 +423,13 @@ library Config {
    * @return The static data, encoded into a sequence of bytes.
    */
   function encodeStatic(
-    bool locked,
-    address swordToken,
-    address seasonPassToken,
-    address strategoKeyToken
+    uint256 minPrice,
+    uint256 startingPrice,
+    uint256 rate,
+    uint256 multiplier,
+    uint256 mintCutoff
   ) internal pure returns (bytes memory) {
-    return abi.encodePacked(locked, swordToken, seasonPassToken, strategoKeyToken);
+    return abi.encodePacked(minPrice, startingPrice, rate, multiplier, mintCutoff);
   }
 
   /**
@@ -382,12 +439,13 @@ library Config {
    * @return The dynamic (variable length) data, encoded into a sequence of bytes.
    */
   function encode(
-    bool locked,
-    address swordToken,
-    address seasonPassToken,
-    address strategoKeyToken
+    uint256 minPrice,
+    uint256 startingPrice,
+    uint256 rate,
+    uint256 multiplier,
+    uint256 mintCutoff
   ) internal pure returns (bytes memory, EncodedLengths, bytes memory) {
-    bytes memory _staticData = encodeStatic(locked, swordToken, seasonPassToken, strategoKeyToken);
+    bytes memory _staticData = encodeStatic(minPrice, startingPrice, rate, multiplier, mintCutoff);
 
     EncodedLengths _encodedLengths;
     bytes memory _dynamicData;
@@ -402,17 +460,5 @@ library Config {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     return _keyTuple;
-  }
-}
-
-/**
- * @notice Cast a value to a bool.
- * @dev Boolean values are encoded as uint8 (1 = true, 0 = false), but Solidity doesn't allow casting between uint8 and bool.
- * @param value The uint8 value to convert.
- * @return result The boolean value.
- */
-function _toBool(uint8 value) pure returns (bool result) {
-  assembly {
-    result := value
   }
 }
