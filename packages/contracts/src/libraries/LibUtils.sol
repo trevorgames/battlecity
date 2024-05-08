@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { Admin } from "../codegen/index.sol";
+import { Admin, MatchConfig } from "../codegen/index.sol";
 
 function isAdmin(bytes32 key) view returns (bool) {
   return Admin.get(key);
@@ -27,4 +27,9 @@ function entityToKeyTuple(bytes32 matchEntity, bytes32 entity) pure returns (byt
   keyTuple = new bytes32[](2);
   keyTuple[0] = matchEntity;
   keyTuple[1] = entity;
+}
+
+function matchHasStarted(bytes32 matchEntity) view returns (bool) {
+  uint256 startTime = MatchConfig.getStartTime(matchEntity);
+  return startTime != 0 && startTime <= block.timestamp;
 }

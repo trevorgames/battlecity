@@ -2,10 +2,15 @@
 pragma solidity >=0.8.24;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { Verifier } from "../codegen/index.sol";
+import { Verifier, MatchState, MatchTurn } from "../codegen/index.sol";
 import { ISetupVerifier, IMoveVerifier, IAttackVerifier, IDefenseVerifier, SetupPubSignals, MovePubSignals, AttackPubSignals, DefensePubSignals } from "../libraries/LibVerifier.sol";
+import { matchHasStarted } from "../libraries/LibUtils.sol";
 
 contract MoveSystem is System {
+  function _act(bytes32 matchEntity, bytes32 entity) internal {
+      require(matchHasStarted(matchEntity), "match has not started");
+  }
+
   function setup(
     bytes32 matchEntity,
     bytes32 entity,

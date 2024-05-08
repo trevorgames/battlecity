@@ -56,9 +56,9 @@ export default defineWorld({
       key: ["matchEntity"],
       schema: {
         matchEntity: "bytes32",
-        registrationTime: "uint256", // timestamp in seconds since the epoch
-        startTime: "uint256", // timestamp in seconds since the epoch
-        turnLength: "uint256", // seconds
+        registrationTime: "uint256", // registration time in seconds since the epoch
+        startTime: "uint256", // start time in seconds since the epoch
+        turnLength: "uint256", // turn length in seconds
         createdBy: "bytes32",
         accessControl: "MatchAccessControlType",
       },
@@ -69,6 +69,26 @@ export default defineWorld({
         matchEntity: "bytes32",
         account: "address",
         value: "bool",
+      },
+    },
+    MatchState: {
+      key: ["matchEntity"],
+      schema: {
+        matchEntity: "bytes32",
+        arrangement0Hash: "uint256",
+        arrangement1Hash: "uint256",
+        arrangement0: "uint32[]",
+        arrangement1: "uint32[]",
+      },
+    },
+    MatchTurn: {
+      key: ["matchEntity"],
+      schema: {
+        matchEntity: "bytes32",
+        turn: "uint32",
+        attackPiece: "uint32",
+        defensePiece: "uint32",
+        resolvedAt: "uint256",
       },
     },
 
