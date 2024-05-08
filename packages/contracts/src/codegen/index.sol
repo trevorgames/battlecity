@@ -12,5 +12,6 @@ import { Verifier, VerifierData } from "./tables/Verifier.sol";
 import { MatchConfig, MatchConfigData } from "./tables/MatchConfig.sol";
 import { SeasonPassIndex } from "./tables/SeasonPassIndex.sol";
 import { SeasonPassConfig, SeasonPassConfigData } from "./tables/SeasonPassConfig.sol";
+import { SeasonTimes, SeasonTimesData } from "./tables/SeasonTimes.sol";
 import { SeasonPassSale, SeasonPassSaleData } from "./tables/SeasonPassSale.sol";
 import { SeasonPassLastSaleAt } from "./tables/SeasonPassLastSaleAt.sol";

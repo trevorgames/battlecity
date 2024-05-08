@@ -63,11 +63,18 @@ export default defineWorld({
     SeasonPassConfig: {
       key: [],
       schema: {
-        minPrice: "uint256",
-        startingPrice: "uint256",
-        rate: "uint256",
-        multiplier: "uint256",
-        mintCutoff: "uint256",
+        minPrice: "uint256", // minimum price
+        startingPrice: "uint256", // starting price
+        rate: "uint256", // price decrease per second
+        multiplier: "uint256", // price increase multiplier per purchase
+        mintCutoff: "uint256", // mint cutoff time
+      },
+    },
+    SeasonTimes: {
+      key: [],
+      schema: {
+        seasonStart: "uint256",
+        seasonEnd: "uint256",
       },
     },
     SeasonPassSale: {
