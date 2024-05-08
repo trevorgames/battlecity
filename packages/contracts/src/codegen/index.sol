@@ -10,6 +10,7 @@ import { Name } from "./tables/Name.sol";
 import { NameExists } from "./tables/NameExists.sol";
 import { Verifier, VerifierData } from "./tables/Verifier.sol";
 import { MatchConfig, MatchConfigData } from "./tables/MatchConfig.sol";
+import { MatchAllowed } from "./tables/MatchAllowed.sol";
 import { SeasonPassIndex } from "./tables/SeasonPassIndex.sol";
 import { SeasonPassConfig, SeasonPassConfigData } from "./tables/SeasonPassConfig.sol";
 import { SeasonTimes, SeasonTimesData } from "./tables/SeasonTimes.sol";

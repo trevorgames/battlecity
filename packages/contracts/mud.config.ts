@@ -1,6 +1,15 @@
 import { defineWorld } from "@latticexyz/world";
 
 export default defineWorld({
+  userTypes: {
+    ResourceId: { filePath: "@latticexyz/store/src/ResourceId.sol", type: "bytes32" },
+  },
+  enums: {
+    MatchAccessControlType: [
+      "AllowList", // 0
+      "SeasonPassOnly", // 1
+    ],
+  },
   tables: {
     Counter: {
       schema: {
@@ -51,6 +60,15 @@ export default defineWorld({
         startTime: "uint256", // timestamp in seconds since the epoch
         turnLength: "uint256", // seconds
         createdBy: "bytes32",
+        accessControl: "MatchAccessControlType",
+      },
+    },
+    MatchAllowed: {
+      key: ["matchEntity", "account"],
+      schema: {
+        matchEntity: "bytes32",
+        account: "address",
+        value: "bool",
       },
     },
 

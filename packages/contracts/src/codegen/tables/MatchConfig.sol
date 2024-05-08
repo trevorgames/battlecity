@@ -16,11 +16,15 @@ import { Schema } from "@latticexyz/store/src/Schema.sol";
 import { EncodedLengths, EncodedLengthsLib } from "@latticexyz/store/src/EncodedLengths.sol";
 import { ResourceId } from "@latticexyz/store/src/ResourceId.sol";
 
+// Import user types
+import { MatchAccessControlType } from "./../common.sol";
+
 struct MatchConfigData {
   uint256 registrationTime;
   uint256 startTime;
   uint256 turnLength;
   bytes32 createdBy;
+  MatchAccessControlType accessControl;
 }
 
 library MatchConfig {
@@ -28,12 +32,12 @@ library MatchConfig {
   ResourceId constant _tableId = ResourceId.wrap(0x746200000000000000000000000000004d61746368436f6e6669670000000000);
 
   FieldLayout constant _fieldLayout =
-    FieldLayout.wrap(0x0080040020202020000000000000000000000000000000000000000000000000);
+    FieldLayout.wrap(0x0081050020202020010000000000000000000000000000000000000000000000);
 
   // Hex-encoded key schema of (bytes32)
   Schema constant _keySchema = Schema.wrap(0x002001005f000000000000000000000000000000000000000000000000000000);
-  // Hex-encoded value schema of (uint256, uint256, uint256, bytes32)
-  Schema constant _valueSchema = Schema.wrap(0x008004001f1f1f5f000000000000000000000000000000000000000000000000);
+  // Hex-encoded value schema of (uint256, uint256, uint256, bytes32, uint8)
+  Schema constant _valueSchema = Schema.wrap(0x008105001f1f1f5f000000000000000000000000000000000000000000000000);
 
   /**
    * @notice Get the table's key field names.
@@ -49,11 +53,12 @@ library MatchConfig {
    * @return fieldNames An array of strings with the names of value fields.
    */
   function getFieldNames() internal pure returns (string[] memory fieldNames) {
-    fieldNames = new string[](4);
+    fieldNames = new string[](5);
     fieldNames[0] = "registrationTime";
     fieldNames[1] = "startTime";
     fieldNames[2] = "turnLength";
     fieldNames[3] = "createdBy";
+    fieldNames[4] = "accessControl";
   }
 
   /**
@@ -239,6 +244,48 @@ library MatchConfig {
   }
 
   /**
+   * @notice Get accessControl.
+   */
+  function getAccessControl(bytes32 matchEntity) internal view returns (MatchAccessControlType accessControl) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = matchEntity;
+
+    bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 4, _fieldLayout);
+    return MatchAccessControlType(uint8(bytes1(_blob)));
+  }
+
+  /**
+   * @notice Get accessControl.
+   */
+  function _getAccessControl(bytes32 matchEntity) internal view returns (MatchAccessControlType accessControl) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = matchEntity;
+
+    bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 4, _fieldLayout);
+    return MatchAccessControlType(uint8(bytes1(_blob)));
+  }
+
+  /**
+   * @notice Set accessControl.
+   */
+  function setAccessControl(bytes32 matchEntity, MatchAccessControlType accessControl) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = matchEntity;
+
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 4, abi.encodePacked(uint8(accessControl)), _fieldLayout);
+  }
+
+  /**
+   * @notice Set accessControl.
+   */
+  function _setAccessControl(bytes32 matchEntity, MatchAccessControlType accessControl) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = matchEntity;
+
+    StoreCore.setStaticField(_tableId, _keyTuple, 4, abi.encodePacked(uint8(accessControl)), _fieldLayout);
+  }
+
+  /**
    * @notice Get the full data.
    */
   function get(bytes32 matchEntity) internal view returns (MatchConfigData memory _table) {
@@ -276,9 +323,10 @@ library MatchConfig {
     uint256 registrationTime,
     uint256 startTime,
     uint256 turnLength,
-    bytes32 createdBy
+    bytes32 createdBy,
+    MatchAccessControlType accessControl
   ) internal {
-    bytes memory _staticData = encodeStatic(registrationTime, startTime, turnLength, createdBy);
+    bytes memory _staticData = encodeStatic(registrationTime, startTime, turnLength, createdBy, accessControl);
 
     EncodedLengths _encodedLengths;
     bytes memory _dynamicData;
@@ -297,9 +345,10 @@ library MatchConfig {
     uint256 registrationTime,
     uint256 startTime,
     uint256 turnLength,
-    bytes32 createdBy
+    bytes32 createdBy,
+    MatchAccessControlType accessControl
   ) internal {
-    bytes memory _staticData = encodeStatic(registrationTime, startTime, turnLength, createdBy);
+    bytes memory _staticData = encodeStatic(registrationTime, startTime, turnLength, createdBy, accessControl);
 
     EncodedLengths _encodedLengths;
     bytes memory _dynamicData;
@@ -318,7 +367,8 @@ library MatchConfig {
       _table.registrationTime,
       _table.startTime,
       _table.turnLength,
-      _table.createdBy
+      _table.createdBy,
+      _table.accessControl
     );
 
     EncodedLengths _encodedLengths;
@@ -338,7 +388,8 @@ library MatchConfig {
       _table.registrationTime,
       _table.startTime,
       _table.turnLength,
-      _table.createdBy
+      _table.createdBy,
+      _table.accessControl
     );
 
     EncodedLengths _encodedLengths;
@@ -355,7 +406,17 @@ library MatchConfig {
    */
   function decodeStatic(
     bytes memory _blob
-  ) internal pure returns (uint256 registrationTime, uint256 startTime, uint256 turnLength, bytes32 createdBy) {
+  )
+    internal
+    pure
+    returns (
+      uint256 registrationTime,
+      uint256 startTime,
+      uint256 turnLength,
+      bytes32 createdBy,
+      MatchAccessControlType accessControl
+    )
+  {
     registrationTime = (uint256(Bytes.getBytes32(_blob, 0)));
 
     startTime = (uint256(Bytes.getBytes32(_blob, 32)));
@@ -363,6 +424,8 @@ library MatchConfig {
     turnLength = (uint256(Bytes.getBytes32(_blob, 64)));
 
     createdBy = (Bytes.getBytes32(_blob, 96));
+
+    accessControl = MatchAccessControlType(uint8(Bytes.getBytes1(_blob, 128)));
   }
 
   /**
@@ -376,7 +439,13 @@ library MatchConfig {
     EncodedLengths,
     bytes memory
   ) internal pure returns (MatchConfigData memory _table) {
-    (_table.registrationTime, _table.startTime, _table.turnLength, _table.createdBy) = decodeStatic(_staticData);
+    (
+      _table.registrationTime,
+      _table.startTime,
+      _table.turnLength,
+      _table.createdBy,
+      _table.accessControl
+    ) = decodeStatic(_staticData);
   }
 
   /**
@@ -407,9 +476,10 @@ library MatchConfig {
     uint256 registrationTime,
     uint256 startTime,
     uint256 turnLength,
-    bytes32 createdBy
+    bytes32 createdBy,
+    MatchAccessControlType accessControl
   ) internal pure returns (bytes memory) {
-    return abi.encodePacked(registrationTime, startTime, turnLength, createdBy);
+    return abi.encodePacked(registrationTime, startTime, turnLength, createdBy, accessControl);
   }
 
   /**
@@ -422,9 +492,10 @@ library MatchConfig {
     uint256 registrationTime,
     uint256 startTime,
     uint256 turnLength,
-    bytes32 createdBy
+    bytes32 createdBy,
+    MatchAccessControlType accessControl
   ) internal pure returns (bytes memory, EncodedLengths, bytes memory) {
-    bytes memory _staticData = encodeStatic(registrationTime, startTime, turnLength, createdBy);
+    bytes memory _staticData = encodeStatic(registrationTime, startTime, turnLength, createdBy, accessControl);
 
     EncodedLengths _encodedLengths;
     bytes memory _dynamicData;
