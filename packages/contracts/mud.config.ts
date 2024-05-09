@@ -52,6 +52,13 @@ export default defineWorld({
       },
     },
 
+    MatchEntityCounter: {
+      key: ["matchEntity"],
+      schema: {
+        matchEntity: "bytes32",
+        entityCounter: "uint32",
+      },
+    },
     MatchConfig: {
       key: ["matchEntity"],
       schema: {
@@ -71,14 +78,13 @@ export default defineWorld({
         value: "bool",
       },
     },
-    MatchState: {
-      key: ["matchEntity"],
+    MatchArrangement: {
+      key: ["matchEntity", "playerEntity"],
       schema: {
         matchEntity: "bytes32",
-        arrangement0Hash: "uint256",
-        arrangement1Hash: "uint256",
-        arrangement0: "uint32[]",
-        arrangement1: "uint32[]",
+        playerEntity: "bytes32",
+        arrangementHash: "uint256",
+        arrangement: "uint32[]", // chessboard position index -> 0/1 (1 represents piece presence)
       },
     },
     MatchTurn: {
@@ -89,6 +95,25 @@ export default defineWorld({
         attackPiece: "uint32",
         defensePiece: "uint32",
         resolvedAt: "uint256",
+      },
+    },
+    // All the player entities present in a Match.
+    MatchPlayers: "bytes32[]",
+    MatchPlayer: {
+      key: ["matchEntity", "playerEntity"],
+      schema: {
+        matchEntity: "bytes32",
+        playerEntity: "bytes32",
+        index: "uint32",
+        account: "address",
+      },
+    },
+    MatchPlayerByAddress: {
+      key: ["matchEntity", "account"],
+      schema: {
+        matchEntity: "bytes32",
+        account: "address",
+        playerEntity: "bytes32",
       },
     },
 

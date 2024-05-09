@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
+uint256 constant ARRANGEMENT_SIZE = 100;
+uint256 constant ARRANGEMENT_SIDE_SIZE = 10;
+uint256 constant PLAYER_ARRANGEMENT_SIZE = 40;
+
 bytes14 constant SWORD_NAMESPACE = "Sword";
 
 bytes14 constant SEASON_PASS_NAMESPACE = "Season1";

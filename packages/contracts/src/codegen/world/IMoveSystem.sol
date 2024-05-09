@@ -13,29 +13,31 @@ import { SetupPubSignals, MovePubSignals, AttackPubSignals, DefensePubSignals } 
 interface IMoveSystem {
   function setup(
     bytes32 matchEntity,
-    bytes32 entity,
+    bytes32 playerEntity,
     uint[8] calldata proof,
     SetupPubSignals calldata pubSignals
   ) external;
 
   function move(
     bytes32 matchEntity,
-    bytes32 entity,
+    bytes32 playerEntity,
     uint[8] calldata proof,
     MovePubSignals calldata pubSignals
   ) external;
 
   function attack(
     bytes32 matchEntity,
-    bytes32 entity,
+    bytes32 playerEntity,
     uint[8] calldata proof,
     AttackPubSignals calldata pubSignals
   ) external;
 
   function defense(
     bytes32 matchEntity,
-    bytes32 entity,
+    bytes32 playerEntity,
     uint[8] calldata proof,
     DefensePubSignals calldata pubSignals
   ) external;
+
+  function arbitrate(bytes32 matchEntity, bytes32 playerEntity) external;
 }
